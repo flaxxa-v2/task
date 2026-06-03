@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAXXA V2 .</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h1>FLAXXA</h1>
+            <p>V2</p>
+        </div>
+        <nav>
+            <a href="#" class="nav-item active"><i class="fas fa-home"></i> Home</a>
+            <a href="#" class="nav-item"><i class="fas fa-gamepad"></i> Games</a>
+            <a href="#" class="nav-item"><i class="fas fa-users"></i> Social</a>
+            <a href="#" class="nav-item"><i class="fas fa-film"></i> Streaming</a>
+            <a href="#" class="nav-item"><i class="fas fa-tools"></i> Utilities</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search or enter URL..." autocomplete="off">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
+            <button class="discord-btn">Discord</button>
+        </header>
+
+        <div class="hero">
+            <h1>Welcome to FLAXXA V2 .</h1>
+            <p>HAVE FUN .</p>
+        </div>
+
+        <div class="categories">
+            <div class="category-btn" data-category="all">All</div>
+            <div class="category-btn active" data-category="games">Games</div>
+            <div class="category-btn" data-category="social">Social</div>
+            <div class="category-btn" data-category="streaming">Streaming</div>
+        </div>
+
+        <div class="apps-grid" id="appsGrid"></div>
+    </div>
+
+    <!-- IFrame Modal -->
+    <div class="iframe-modal" id="iframeModal">
+        <div class="modal-header">
+            <h3 id="modalTitle">Loading...</h3>
+            <button class="close-modal" id="closeModal">✕</button>
+        </div>
+        <iframe id="appFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"></iframe>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
