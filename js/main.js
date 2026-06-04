@@ -1,16 +1,14 @@
 const apps = [
-    { name: "TikTok", url: "https://tiktok.com", category: "social", icon: "https://www.logo.wine/a/logo/TikTok/TikTok-Logo.wine.svg" },
-    { name: "X (Twitter)", url: "https://x.com", category: "social", icon: "https://pngimg.com/uploads/x_logo/x_logo_PNG14.png" },
-    { name: "YouTube", url: "https://youtube.com", category: "streaming", icon: "https://picsum.photos/id/1018/300/200" },
+    { name: "TikTok", url: "https://tiktok.com", category: "social", icon: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" },
+    { name: "X (Twitter)", url: "https://x.com", category: "social", icon: "https://upload.wikimedia.org/wikipedia/commons/6/60/Twitter_Logo_2021.svg" },
+    { name: "YouTube", url: "https://youtube.com", category: "streaming", icon: "https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" },
     { name: "Cookie Clicker", url: "https://orteil.dashnet.org/cookieclicker/", category: "games", icon: "https://picsum.photos/id/102/300/200" },
     { name: "1v1.lol", url: "https://1v1.lol", category: "games", icon: "https://picsum.photos/id/133/300/200" },
     { name: "BasketBros", url: "https://basketbros.io", category: "games", icon: "https://picsum.photos/id/201/300/200" },
     { name: "Neal.fun", url: "https://neal.fun", category: "games", icon: "https://picsum.photos/id/237/300/200" },
-    { name: "Geometry Dash", url: "https://geometrydash.io", category: "games", icon: "https://picsum.photos/id/180/300/200" },
-    { name: "Discord", url: "https://discord.com/app", category: "social", icon: "https://picsum.photos/id/201/300/200" },
-    { name: "Instagram", url: "https://instagram.com", category: "social", icon: "https://picsum.photos/id/1011/300/200" },
-    { name: "Twitch", url: "https://twitch.tv", category: "streaming", icon: "https://picsum.photos/id/251/300/200" },
-    { name: "Roblox", url: "https://roblox.com", category: "games", icon: "https://picsum.photos/id/180/300/200" }
+    { name: "Krunker.io", url: "https://krunker.io", category: "games", icon: "https://picsum.photos/id/180/300/200" },
+    { name: "Slope", url: "https://slope-game.io", category: "games", icon: "https://picsum.photos/id/251/300/200" },
+    { name: "Discord", url: "https://discord.com/app", category: "social", icon: "https://upload.wikimedia.org/wikipedia/commons/7/75/Discord_icon.svg" }
 ];
 
 function renderApps(filteredApps) {
@@ -21,7 +19,7 @@ function renderApps(filteredApps) {
         const card = document.createElement('div');
         card.className = 'app-card';
         card.innerHTML = `
-            <img src="${app.icon}" alt="${app.name}">
+            <img src="${app.icon}" alt="${app.name}" onerror="this.src='https://picsum.photos/id/180/300/200'">
             <div class="app-info">
                 <h4>${app.name}</h4>
             </div>
@@ -39,38 +37,60 @@ function openApp(app) {
     title.textContent = app.name;
     frame.src = app.url;
     modal.style.display = 'flex';
+
+    // Auto fallback if iframe fails to load
+    frame.onerror = () => {
+        modal.style.display = 'none';
+        const win = window.open("about:blank", "_blank");
+        win.document.write(`<iframe src="${app.url}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+    };
 }
 
 document.getElementById('closeModal').addEventListener('click', () => {
     const modal = document.getElementById('iframeModal');
     const frame = document.getElementById('appFrame');
     modal.style.display = 'none';
-    frame.src = ''; // Clear iframe
+    frame.src = '';
 });
 
-// Search functionality
+// Search
 document.getElementById('searchBtn').addEventListener('click', () => {
-    const query = document.getElementById('searchInput').value.trim();
+    let query = document.getElementById('searchInput').value.trim();
     if (query) {
-        const frame = document.getElementById('appFrame');
-        const modal = document.getElementById('iframeModal');
-        document.getElementById('modalTitle').textContent = "Custom Site";
-        frame.src = query.startsWith('http') ? query : 'https://' + query;
-        modal.style.display = 'flex';
+        if (!query.startsWith('http')) query = 'https://' + query;
+        const win = window.open("about:blank", "_blank");
+        win.document.write(`<iframe src="${query}" style="width:100vw;height:100vh;border:none;"></iframe>`);
     }
 });
 
-// Category filtering
-document.querySelectorAll('.category-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+// Category filtering (both sidebar and top)
+function setupFilters() {
+    document.querySelectorAll('.nav-item, .category-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Remove active from all
+            document.querySelectorAll('.nav-item, .category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
 
-        const category = btn.dataset.category;
-        const filtered = category === 'all' ? apps : apps.filter(app => app.category === category);
-        renderApps(filtered);
+            const category = btn.dataset.category;
+            const filtered = category === 'all' ? apps : apps.filter(app => app.category === category);
+            renderApps(filtered);
+        });
     });
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'u') {
+        const url = prompt("Enter URL to unblock:");
+        if (url) {
+            const cleanUrl = url.startsWith('http') ? url : 'https://' + url;
+            const win = window.open("about:blank", "_blank");
+            win.document.write(`<iframe src="${cleanUrl}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+        }
+    }
 });
 
-// Initialize
+setupFilters();
 renderApps(apps);
