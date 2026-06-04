@@ -11,23 +11,10 @@ const apps = [
     { name: "Slope", url: "https://slope-game.io", category: "games", icon: "https://picsum.photos/id/251/300/200" }
 ];
 
-let currentUser = null;
-
-// Fake Account System
-document.getElementById('accountBtn').addEventListener('click', () => {
-    const name = prompt("Enter username to sign in:");
-    if (name) {
-        currentUser = name;
-        document.getElementById('accountBtn').textContent = `👤 ${name}`;
-        alert(`Signed in as ${name}`);
-    }
-});
-
-// Render Apps
-function renderApps(filtered) {
+function renderApps(filteredApps) {
     const grid = document.getElementById('appsGrid');
     grid.innerHTML = '';
-    filtered.forEach(app => {
+    filteredApps.forEach(app => {
         const card = document.createElement('div');
         card.className = 'app-card';
         card.innerHTML = `
@@ -41,45 +28,21 @@ function renderApps(filtered) {
 
 function openApp(app) {
     const proxiedUrl = PROXY_BASE + "proxy/" + encodeURIComponent(app.url);
-    const modal = document.getElementById('iframeModal');
-    const frame = document.getElementById('appFrame');
-    const title = document.getElementById('modalTitle');
-
-    title.textContent = app.name;
-    frame.src = proxiedUrl;
-    modal.style.display = 'flex';
+    document.getElementById('modalTitle').textContent = app.name;
+    document.getElementById('appFrame').src = proxiedUrl;
+    document.getElementById('iframeModal').style.display = 'flex';
 }
 
-// Feedback with Webhook
-document.getElementById('sendFeedback').addEventListener('click', async () => {
-    const msg = document.getElementById('feedbackInput').value.trim();
-    if (!msg) return;
-
-    const payload = {
-        embeds: [{
-            title: "New Feedback - FLAXXA HUB V1",
-            description: msg,
-            color: 0x8b7cff,
-            timestamp: new Date().toISOString()
-        }]
-    };
-
-    await fetch("https://discord.com/api/webhooks/1511894501600526506/1giE7wUPTJPiQfiyM8c1mbE1d5xpSAUqx_yCCGKbKk4DqrhVh1b5FbJQAlKvARaveI4D", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-
-    alert("Feedback sent. Thank you!");
-    document.getElementById('feedbackInput').value = '';
+document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('iframeModal').style.display = 'none';
+    document.getElementById('appFrame').src = '';
 });
 
-// Search & Filters (same as before)
 document.getElementById('searchBtn').addEventListener('click', () => {
-    let q = document.getElementById('searchInput').value.trim();
-    if (q) {
-        if (!q.startsWith('http')) q = 'https://' + q;
-        const url = PROXY_BASE + "proxy/" + encodeURIComponent(q);
+    let query = document.getElementById('searchInput').value.trim();
+    if (query) {
+        if (!query.startsWith('http')) query = 'https://' + query;
+        const url = PROXY_BASE + "proxy/" + encodeURIComponent(query);
         const win = window.open("about:blank", "_blank");
         win.document.write(`<iframe src="${url}" style="width:100vw;height:100vh;border:none;"></iframe>`);
     }
@@ -97,18 +60,6 @@ function setupFilters() {
         });
     });
 }
-
-// Glowing Cursor Trail
-const trail = document.getElementById('cursorTrail');
-document.addEventListener('mousemove', (e) => {
-    trail.style.left = e.clientX + 'px';
-    trail.style.top = e.clientY + 'px';
-});
-
-document.getElementById('closeModal').addEventListener('click', () => {
-    document.getElementById('iframeModal').style.display = 'none';
-    document.getElementById('appFrame').src = '';
-});
 
 setupFilters();
 renderApps(apps);
