@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLAXXA HUB V1</title>
+    <title>New Tab</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="icon" href="https://picsum.photos/id/180/32/32" type="image/x-icon">
 </head>
 <body>
-    <div class="cursor-follow" id="customCursor"></div>
+    <div class="cursor-trail" id="cursorTrail"></div>
 
     <div class="sidebar">
         <div class="logo">
-            <h1>V1</h1>
-            <span class="version">FLAXXA</span>
+            <h1>FLAXXA</h1>
+            <span class="version">HUB V1</span>
         </div>
         
         <nav id="sidebarNav">
@@ -23,6 +22,10 @@
             <a href="#" class="nav-item" data-category="social"><i class="fas fa-users"></i> Social</a>
             <a href="#" class="nav-item" data-category="streaming"><i class="fas fa-film"></i> Streaming</a>
         </nav>
+
+        <div class="account-section">
+            <button id="accountBtn" class="account-btn">Sign In</button>
+        </div>
     </div>
 
     <div class="main-content">
@@ -35,8 +38,8 @@
         </header>
 
         <div class="hero">
-            <h1>Welcome to FLAXXA HUB V1. The newest anti-moderation site.</h1>
-            <p class="subtitle">Check Discord for more updates.</p>
+            <h1>Welcome to FLAXXA HUB V1</h1>
+            <p class="subtitle">Join Discord for more links!</p>
         </div>
 
         <div class="categories" id="topCategories">
@@ -47,6 +50,13 @@
         </div>
 
         <div class="apps-grid" id="appsGrid"></div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <h3>Send Feedback</h3>
+            <textarea id="feedbackInput" placeholder="Report issues or suggest games..."></textarea>
+            <button id="sendFeedback">Send Feedback</button>
+        </div>
     </div>
 
     <!-- IFrame Modal -->
@@ -55,7 +65,7 @@
             <h3 id="modalTitle">Loading...</h3>
             <button class="close-modal" id="closeModal">✕</button>
         </div>
-        <iframe id="appFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-downloads"></iframe>
+        <iframe id="appFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-downloads allow-presentation"></iframe>
     </div>
 
     <script src="js/main.js"></script>
