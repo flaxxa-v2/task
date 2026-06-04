@@ -23,9 +23,7 @@
             <a href="#" class="nav-item" data-category="streaming"><i class="fas fa-film"></i> Streaming</a>
         </nav>
 
-        <div class="account-section">
-            <button id="accountBtn" class="account-btn">Sign In</button>
-        </div>
+        <button id="accountBtn" class="sign-in-btn">Sign In</button>
     </div>
 
     <div class="main-content">
@@ -38,11 +36,11 @@
         </header>
 
         <div class="hero">
-            <h1>Welcome to FLAXXA HUB V1</h1>
-            <p class="subtitle">Join Discord for more links!</p>
+            <h1>Welcome to FLAXXA HUB V1.</h1>
+            <p class="subtitle">Join Discord for new links!</p>
         </div>
 
-        <div class="categories" id="topCategories">
+        <div class="categories">
             <div class="category-btn active" data-category="all">All</div>
             <div class="category-btn" data-category="games">Games</div>
             <div class="category-btn" data-category="social">Social</div>
@@ -50,22 +48,15 @@
         </div>
 
         <div class="apps-grid" id="appsGrid"></div>
-
-        <!-- Feedback Section -->
-        <div class="feedback-section">
-            <h3>Send Feedback</h3>
-            <textarea id="feedbackInput" placeholder="Report issues or suggest games..."></textarea>
-            <button id="sendFeedback">Send Feedback</button>
-        </div>
     </div>
 
-    <!-- IFrame Modal -->
+    <!-- IFrame Modal - EXACT match to your reference -->
     <div class="iframe-modal" id="iframeModal">
         <div class="modal-header">
-            <h3 id="modalTitle">Loading...</h3>
+            <h3 id="modalTitle">Cookie Clicker</h3>
             <button class="close-modal" id="closeModal">✕</button>
         </div>
-        <iframe id="appFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-downloads allow-presentation"></iframe>
+        <iframe id="appFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-downloads"></iframe>
     </div>
 
     <script src="js/main.js"></script>
