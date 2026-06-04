@@ -11,6 +11,8 @@ const apps = [
     { name: "Discord", url: "https://discord.com/app", category: "social", icon: "https://upload.wikimedia.org/wikipedia/commons/7/75/Discord_icon.svg" }
 ];
 
+const PROXY_BASE = "https://YOUR-WORKER-NAME.yourname.workers.dev/proxy/"; // ← CHANGE THIS
+
 function renderApps(filteredApps) {
     const grid = document.getElementById('appsGrid');
     grid.innerHTML = '';
@@ -30,20 +32,24 @@ function renderApps(filteredApps) {
 }
 
 function openApp(app) {
+    const proxiedUrl = PROXY_BASE + encodeURIComponent(app.url);
+
     const modal = document.getElementById('iframeModal');
     const frame = document.getElementById('appFrame');
     const title = document.getElementById('modalTitle');
 
     title.textContent = app.name;
-    frame.src = app.url;
+    frame.src = proxiedUrl;
     modal.style.display = 'flex';
 
-    // Auto fallback if iframe fails to load
-    frame.onerror = () => {
-        modal.style.display = 'none';
-        const win = window.open("about:blank", "_blank");
-        win.document.write(`<iframe src="${app.url}" style="width:100vw;height:100vh;border:none;"></iframe>`);
-    };
+    // Strong fallback
+    setTimeout(() => {
+        if (!frame.contentDocument || frame.contentDocument.body.innerHTML.length < 50) {
+            modal.style.display = 'none';
+            const win = window.open("about:blank", "_blank");
+            win.document.write(`<iframe src="${proxiedUrl}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+        }
+    }, 4000);
 }
 
 document.getElementById('closeModal').addEventListener('click', () => {
@@ -53,23 +59,21 @@ document.getElementById('closeModal').addEventListener('click', () => {
     frame.src = '';
 });
 
-// Search
+// Search with proxy
 document.getElementById('searchBtn').addEventListener('click', () => {
     let query = document.getElementById('searchInput').value.trim();
     if (query) {
         if (!query.startsWith('http')) query = 'https://' + query;
+        const proxiedUrl = PROXY_BASE + encodeURIComponent(query);
         const win = window.open("about:blank", "_blank");
-        win.document.write(`<iframe src="${query}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+        win.document.write(`<iframe src="${proxiedUrl}" style="width:100vw;height:100vh;border:none;"></iframe>`);
     }
 });
 
-// Category filtering (both sidebar and top)
 function setupFilters() {
     document.querySelectorAll('.nav-item, .category-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            
-            // Remove active from all
             document.querySelectorAll('.nav-item, .category-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
@@ -80,14 +84,15 @@ function setupFilters() {
     });
 }
 
-// Keyboard shortcut
+// Keyboard shortcut Ctrl+Shift+U
 document.addEventListener('keydown', e => {
     if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'u') {
         const url = prompt("Enter URL to unblock:");
         if (url) {
             const cleanUrl = url.startsWith('http') ? url : 'https://' + url;
+            const proxiedUrl = PROXY_BASE + encodeURIComponent(cleanUrl);
             const win = window.open("about:blank", "_blank");
-            win.document.write(`<iframe src="${cleanUrl}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+            win.document.write(`<iframe src="${proxiedUrl}" style="width:100vw;height:100vh;border:none;"></iframe>`);
         }
     }
 });
