@@ -10,7 +10,7 @@ body {
 
 /* Cursor */
 .cursor-trail {
-    position: fixed;
+    position: absolute;
     width: 12px;
     height: 12px;
     background: #a78bff;
